@@ -1,0 +1,19 @@
+{
+  "Name": "PoseDump",
+  "Author": "JohnnyTaco",
+  "Description": "Utility for creating poses",
+  "ModVersion": "1.01",
+  "GameVersion": "1.21+",
+  "ThumbnailPath": "thumb.png",
+  "EntryPoint": "PoseDump.PoseMain",
+  "Tags": [
+    "utility",
+	"poses"
+  ],
+  "Scripts": [
+    "PoseDump.cs"
+  ],
+  "Active": true,
+  "UGCIdentity": null,
+  "CreatorUGCIdentity": "2579915682"
+}
