@@ -8,10 +8,11 @@
   "EntryPoint": "PoseDump.PoseMain",
   "Tags": [
     "utility",
-	"poses"
+    "poses"
   ],
   "Scripts": [
-    "PoseDump.cs"
+    "PoseDump.cs",
+    "PoseClass.cs"
   ],
   "Active": true,
   "UGCIdentity": null,
