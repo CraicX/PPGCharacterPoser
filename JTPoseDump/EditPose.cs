@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using System.ComponentModel;
 using System.Reflection;
+using System.Text.Json;
 
 namespace JTPoseDump
 {
@@ -24,9 +25,24 @@ namespace JTPoseDump
 
 			Config.mainForm.statusLabel.Text = "Moved " + Config.PoseImageFile + " to " + ImgDest;
 
+			if (File.Exists(ImgDest))
+			{
+				File.Delete(ImgDest);
+			}
+
 			File.Move(Config.PoseImageFile, ImgDest);
 
 			Task ignoredAwaitableResult = delayedWork();
+
+			if (Config.mainForm.FlowPoseSet.Controls.Count > 0 )
+			{
+				for(int i = Config.mainForm.FlowPoseSet.Controls.Count; --i >= 0;)
+				{
+					Config.mainForm.FlowPoseSet.Controls[i].Dispose();
+				}
+				
+			}
+			SetCurrentPose();
 		}
 
 
@@ -34,6 +50,14 @@ namespace JTPoseDump
 		{
 			string poseFile = Path.Combine(Config.PoseDataPath, "export.txt");
 			string poseOut  = "";
+
+			JsonSerializerOptions options = new JsonSerializerOptions
+			{
+				WriteIndented = true
+			};
+			string jsonString = JsonSerializer.Serialize<PoseClass>(CurrentPose, options);
+
+			File.WriteAllText(poseFile + ".json", jsonString);
 
 			foreach ( string limbName in Config.LimbNames )
 			{
@@ -47,7 +71,9 @@ namespace JTPoseDump
 
 			File.WriteAllText(poseFile, poseOut);
 
+			Config.mainForm.statusLabel.Text = "Saved Pose: " + poseFile;
 
+			Task ignoredAwaitableResult = delayedWork();
 		}
 
 		public static void ResetPoseData()
@@ -63,9 +89,16 @@ namespace JTPoseDump
 
 			Config.mainForm.statusLabel.Text = "Moved " + Config.PoseDataFile + " to " + PoseDest;
 
+			if (File.Exists(PoseDest))
+			{
+				File.Delete(PoseDest);
+			}
+
 			File.Move(Config.PoseDataFile, PoseDest);
 
 			Task ignoredAwaitableResult = delayedWork();
+
+			SetCurrentData();
 		}
 
 		private static async Task delayedWork()
@@ -130,15 +163,10 @@ namespace JTPoseDump
 					else width = (int) flowwidth / (flowwidth / 100);
 				}
 				
-				PictureBox picture = new PictureBox
-				{
-					Name     = "pictureBox",
-					Size     = new Size(width, width),
-					Image    = Utilities.CropImage(System.Drawing.Image.FromFile( ImgDest ), 75),
-					SizeMode = PictureBoxSizeMode.StretchImage,
-				};
+				System.Drawing.Image tmpImage = Utilities.LoadImageSafe(ImgDest);
 
-				Config.mainForm.FlowPoseSet.Controls.Add(picture);
+				Config.mainForm.ImgCurrent.Image = Utilities.CropImage(tmpImage, 75);
+
 			}
 		}
 
