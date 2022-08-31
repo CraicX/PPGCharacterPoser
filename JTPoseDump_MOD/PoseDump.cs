@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Serialization;
-
+using System.Reflection;
 
 
 namespace PoseDump
@@ -56,7 +55,6 @@ namespace PoseDump
 							(KeyCode)Enum.Parse(typeof(KeyCode), KeyParts[3].Trim())
 						);
 
-
 						InputSystem.Actions.Add(inputKey, actionCreate);
 					}
 				}
@@ -75,8 +73,8 @@ namespace PoseDump
 
 	public class PoseDump : MonoBehaviour
 	{
-		public static string posePath = "poses/";
-		public static string poseFile = posePath + "poseFile.json";
+		public static string posePath        = "poses/";
+		public static string poseFile        = posePath + "poseFile.json";
 		public static float ThumbnailPadding = 1.5f;
 		public static RagdollPose Ragdoll;
 		public static PoseConfig PConfig;
@@ -138,20 +136,19 @@ namespace PoseDump
 				return;
 			}
 
-			string LogData = "";
-
-			string hr = new string('-', 84);
+			PoseClass CurrentPose = new PoseClass();
+			Type type = CurrentPose.GetType();
 
 			foreach (KeyValuePair<int, RagdollPose> Rag in Rags)
 			{
-				Rag.Value.ConstructDictionary();
-				
 				foreach (RagdollPose.LimbPose limbPose in Rags[Rag.Key].Angles)
 				{
-					LogData += limbPose.Name + ":" + limbPose.Angle + ",\n";
+					PropertyInfo prop = type.GetProperty(limbPose.Name);
+					prop.SetValue (CurrentPose, limbPose.Angle, null);
 				}
-
 			}
+
+			string LogData = JsonConvert.SerializeObject(CurrentPose);
 
 			File.WriteAllText( poseFile, LogData );
 
@@ -165,7 +162,7 @@ namespace PoseDump
 
 		public static void ActivatePose(List<PhysicalBehaviour> PBS)
 		{
-			string jsonFile = "C:\\pp\\poses\\export.txt.json";
+			string jsonFile = "C:\\pp\\poses\\export.json";
 
 			if (!File.Exists(jsonFile)) return;
 			ModAPI.Notify("found file");
