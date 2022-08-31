@@ -43,24 +43,28 @@
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.BtnShowGrid = new System.Windows.Forms.ToolStripButton();
 			this.BtnShowFullWidth = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.BtnReload = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.BtnFavorite = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.TxtFilter = new System.Windows.Forms.ToolStripTextBox();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.BtnDelete = new System.Windows.Forms.ToolStripButton();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.PGrid = new System.Windows.Forms.PropertyGrid();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.BtnNew = new System.Windows.Forms.ToolStripButton();
 			this.BtnSave = new System.Windows.Forms.ToolStripButton();
-			this.BtnFav = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.BtnRefresh = new System.Windows.Forms.ToolStripButton();
 			this.BtnSendToGame = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.BtnDelete = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
 			this.TabBrowse = new System.Windows.Forms.TabPage();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.TimerFileSystem = new System.Windows.Forms.Timer(this.components);
 			this.AppIcons = new System.Windows.Forms.ImageList(this.components);
+			this.BtnImport = new System.Windows.Forms.ToolStripButton();
 			this.Menu.SuspendLayout();
 			this.TabControl.SuspendLayout();
 			this.TabCapture.SuspendLayout();
@@ -181,9 +185,11 @@
 			// 
 			// FlowPoseSet
 			// 
+			this.FlowPoseSet.AutoScroll = true;
 			this.FlowPoseSet.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.FlowPoseSet.Location = new System.Drawing.Point(0, 25);
 			this.FlowPoseSet.Name = "FlowPoseSet";
+			this.FlowPoseSet.Padding = new System.Windows.Forms.Padding(5);
 			this.FlowPoseSet.Size = new System.Drawing.Size(386, 417);
 			this.FlowPoseSet.TabIndex = 3;
 			// 
@@ -192,7 +198,15 @@
 			this.toolStrip2.BackColor = System.Drawing.Color.Gainsboro;
 			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BtnShowGrid,
-            this.BtnShowFullWidth});
+            this.BtnShowFullWidth,
+            this.toolStripSeparator4,
+            this.BtnReload,
+            this.toolStripSeparator5,
+            this.BtnFavorite,
+            this.toolStripSeparator6,
+            this.TxtFilter,
+            this.toolStripSeparator3,
+            this.BtnDelete});
 			this.toolStrip2.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip2.Name = "toolStrip2";
 			this.toolStrip2.Size = new System.Drawing.Size(386, 25);
@@ -202,26 +216,91 @@
 			// BtnShowGrid
 			// 
 			this.BtnShowGrid.BackColor = System.Drawing.Color.Silver;
+			this.BtnShowGrid.Checked = true;
 			this.BtnShowGrid.CheckOnClick = true;
+			this.BtnShowGrid.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.BtnShowGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.BtnShowGrid.Image = global::JTPoseDump.Properties.Resources.Grid_Squares;
 			this.BtnShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnShowGrid.Name = "BtnShowGrid";
 			this.BtnShowGrid.Size = new System.Drawing.Size(23, 22);
 			this.BtnShowGrid.Text = "toolStripButton4";
+			this.BtnShowGrid.Click += new System.EventHandler(this.BtnShowGrid_Click_1);
 			// 
 			// BtnShowFullWidth
 			// 
 			this.BtnShowFullWidth.BackColor = System.Drawing.Color.Silver;
-			this.BtnShowFullWidth.Checked = true;
 			this.BtnShowFullWidth.CheckOnClick = true;
-			this.BtnShowFullWidth.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.BtnShowFullWidth.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.BtnShowFullWidth.Image = global::JTPoseDump.Properties.Resources.Mirror_Top;
 			this.BtnShowFullWidth.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnShowFullWidth.Name = "BtnShowFullWidth";
 			this.BtnShowFullWidth.Size = new System.Drawing.Size(23, 22);
 			this.BtnShowFullWidth.Text = "toolStripButton5";
+			this.BtnShowFullWidth.Click += new System.EventHandler(this.BtnShowFullWidth_Click_1);
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+			// 
+			// BtnReload
+			// 
+			this.BtnReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnReload.Image = global::JTPoseDump.Properties.Resources.Reload;
+			this.BtnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnReload.Margin = new System.Windows.Forms.Padding(10, 1, 0, 2);
+			this.BtnReload.Name = "BtnReload";
+			this.BtnReload.Size = new System.Drawing.Size(23, 22);
+			this.BtnReload.Text = "toolStripButton1";
+			this.BtnReload.Click += new System.EventHandler(this.BtnReload_Click);
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+			// 
+			// BtnFavorite
+			// 
+			this.BtnFavorite.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnFavorite.Image = global::JTPoseDump.Properties.Resources.Star;
+			this.BtnFavorite.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnFavorite.Name = "BtnFavorite";
+			this.BtnFavorite.Size = new System.Drawing.Size(23, 22);
+			this.BtnFavorite.Text = "toolStripButton2";
+			// 
+			// toolStripSeparator6
+			// 
+			this.toolStripSeparator6.Name = "toolStripSeparator6";
+			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+			// 
+			// TxtFilter
+			// 
+			this.TxtFilter.AutoSize = false;
+			this.TxtFilter.BackColor = System.Drawing.Color.Silver;
+			this.TxtFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.TxtFilter.CausesValidation = false;
+			this.TxtFilter.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.TxtFilter.Margin = new System.Windows.Forms.Padding(10, 0, 1, 0);
+			this.TxtFilter.Name = "TxtFilter";
+			this.TxtFilter.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+			this.TxtFilter.Size = new System.Drawing.Size(100, 23);
+			this.TxtFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtFilter_KeyUp);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+			// 
+			// BtnDelete
+			// 
+			this.BtnDelete.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.BtnDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnDelete.Image = global::JTPoseDump.Properties.Resources.Close;
+			this.BtnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnDelete.Name = "BtnDelete";
+			this.BtnDelete.Size = new System.Drawing.Size(23, 22);
+			this.BtnDelete.Text = "toolStripButton1";
 			// 
 			// panel1
 			// 
@@ -252,14 +331,10 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.BtnNew,
             this.BtnSave,
-            this.BtnFav,
             this.toolStripSeparator1,
-            this.BtnRefresh,
-            this.BtnSendToGame,
+            this.BtnImport,
             this.toolStripSeparator2,
-            this.BtnDelete,
-            this.toolStripSeparator3,
-            this.toolStripButton7});
+            this.BtnSendToGame});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(651, 25);
@@ -283,29 +358,12 @@
 			this.BtnSave.Name = "BtnSave";
 			this.BtnSave.Size = new System.Drawing.Size(23, 22);
 			this.BtnSave.Text = "toolStripButton2";
-			// 
-			// BtnFav
-			// 
-			this.BtnFav.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.BtnFav.Image = global::JTPoseDump.Properties.Resources.Star;
-			this.BtnFav.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.BtnFav.Name = "BtnFav";
-			this.BtnFav.Size = new System.Drawing.Size(23, 22);
-			this.BtnFav.Text = "toolStripButton3";
+			this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-			// 
-			// BtnRefresh
-			// 
-			this.BtnRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.BtnRefresh.Image = global::JTPoseDump.Properties.Resources.Reload;
-			this.BtnRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.BtnRefresh.Name = "BtnRefresh";
-			this.BtnRefresh.Size = new System.Drawing.Size(23, 22);
-			this.BtnRefresh.Text = "toolStripButton5";
 			// 
 			// BtnSendToGame
 			// 
@@ -321,29 +379,6 @@
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-			// 
-			// BtnDelete
-			// 
-			this.BtnDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.BtnDelete.Image = global::JTPoseDump.Properties.Resources.Close;
-			this.BtnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.BtnDelete.Name = "BtnDelete";
-			this.BtnDelete.Size = new System.Drawing.Size(23, 22);
-			this.BtnDelete.Text = "toolStripButton1";
-			// 
-			// toolStripSeparator3
-			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-			// 
-			// toolStripButton7
-			// 
-			this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton7.Image = global::JTPoseDump.Properties.Resources.Delete;
-			this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton7.Name = "toolStripButton7";
-			this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton7.Text = "toolStripButton7";
 			// 
 			// TabBrowse
 			// 
@@ -420,6 +455,16 @@
 			this.AppIcons.Images.SetKeyName(36, "Switch User.png");
 			this.AppIcons.Images.SetKeyName(37, "Up Arrow.png");
 			// 
+			// BtnImport
+			// 
+			this.BtnImport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnImport.Image = global::JTPoseDump.Properties.Resources.Import_Display_Top;
+			this.BtnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnImport.Name = "BtnImport";
+			this.BtnImport.Size = new System.Drawing.Size(23, 22);
+			this.BtnImport.Text = "toolStripButton1";
+			this.BtnImport.Click += new System.EventHandler(this.BtnImport_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -469,19 +514,14 @@
         public System.Windows.Forms.Panel panel2;
         public System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.ToolStrip toolStrip1;
-        public System.Windows.Forms.ToolStripButton BtnDelete;
         public System.Windows.Forms.Timer TimerFileSystem;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel;
 		public System.Windows.Forms.ImageList AppIcons;
 		private System.Windows.Forms.ToolStripButton BtnNew;
 		private System.Windows.Forms.ToolStripButton BtnSave;
-		private System.Windows.Forms.ToolStripButton BtnFav;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton BtnRefresh;
 		private System.Windows.Forms.ToolStripButton BtnSendToGame;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-		private System.Windows.Forms.ToolStripButton toolStripButton7;
 		public System.Windows.Forms.PropertyGrid PGrid;
         public System.Windows.Forms.RichTextBox RTB;
         public System.Windows.Forms.PictureBox ImgCurrent;
@@ -489,6 +529,15 @@
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton BtnShowGrid;
         private System.Windows.Forms.ToolStripButton BtnShowFullWidth;
-    }
+        private System.Windows.Forms.ToolStripButton BtnReload;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripButton BtnDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripTextBox TxtFilter;
+        private System.Windows.Forms.ToolStripButton BtnFavorite;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripButton BtnImport;
+	}
 }
 

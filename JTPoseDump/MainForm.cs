@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JTPoseDump
@@ -65,14 +58,43 @@ namespace JTPoseDump
 			BtnShowGrid.Checked      = false;
 		}
 
-		private void ListLimbs_SelectedIndexChanged( object sender, EventArgs e )
-		{
-
-		}
 
 		private void BtnSendToGame_Click( object sender, EventArgs e )
 		{
 			EditPose.SendPoseToGame();
+		}
+
+        private void BtnSave_Click( object sender, EventArgs e )
+        {
+			EditPose.SavePose();
+        }
+
+		private void BtnReload_Click( object sender, EventArgs e )
+		{
+			Config.BPose.RefreshPoses();
+		}
+
+		private void BtnShowGrid_Click_1( object sender, EventArgs e )
+		{
+			BtnShowFullWidth.Checked = false;
+			Config.PIView = PoseImageView.GridView;
+		}
+
+		private void BtnShowFullWidth_Click_1( object sender, EventArgs e )
+		{
+			BtnShowGrid.Checked = false;
+			Config.PIView = PoseImageView.FullWidth;
+		}
+
+		private void TxtFilter_KeyUp( object sender, KeyEventArgs e )
+		{
+			
+			Config.BPose.Filter = TxtFilter.Text;
+		}
+
+		private void BtnImport_Click( object sender, EventArgs e )
+		{
+			EditPose.Import(RTB.Text);
 		}
 	}
 }

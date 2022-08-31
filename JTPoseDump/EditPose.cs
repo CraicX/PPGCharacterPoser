@@ -1,36 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Drawing;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using System.ComponentModel;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Drawing.Imaging;
+using System.Collections.Generic;
+using Xamarin.Forms.Internals;
 
 namespace JTPoseDump
 {
 	public static class EditPose
 	{
-		public static PoseClass CurrentPose = new PoseClass();
+		public static PoseClass CurrentPose  = new PoseClass();
+		public static string WipImagePath    = Path.Combine(Config.ImagePath, "currentpose.png");
+		public static string WipDataPath     = Path.Combine(Config.DataPath, "current.json");
+
+		public static void Edit( PoseObject poseObject )
+		{
+			CurrentPose = poseObject.PoseClass;
+
+			if (File.Exists(WipDataPath))  File.Delete(WipDataPath);
+			if (File.Exists(WipImagePath)) File.Delete(WipImagePath);
+
+			if (File.Exists(poseObject.ImagePath)) File.Copy(poseObject.ImagePath, WipImagePath);
+			File.Copy(poseObject.DataPath, WipDataPath);
+
+			SetCurrentData();
+			SetCurrentPose();
+
+		}
+
 
 		public static void ResetPoseImage()
 		{
 			if (!File.Exists(Config.PoseImageFile)) return;
 
-			string ImgDest = Path.Combine(Config.ImagePath, "currentpose.png");
+			if (File.Exists(WipImagePath)) File.Delete(WipImagePath);
 
-			Config.mainForm.statusLabel.Text = "Moved " + Config.PoseImageFile + " to " + ImgDest;
-
-			if (File.Exists(ImgDest))
-			{
-				File.Delete(ImgDest);
-			}
-
-			File.Move(Config.PoseImageFile, ImgDest);
+			File.Move(Config.PoseImageFile, WipImagePath);
 
 			Task ignoredAwaitableResult = delayedWork();
 
@@ -40,16 +49,54 @@ namespace JTPoseDump
 				{
 					Config.mainForm.FlowPoseSet.Controls[i].Dispose();
 				}
-				
 			}
+
 			SetCurrentPose();
+		}
+
+		public static void SavePose( PoseClass posec=null, bool DoRefresh=true )
+		{
+			bool useImage = true;
+			if (posec == null) posec = CurrentPose;
+			else useImage = false;
+			if (posec.Name == "")
+			{
+				// MessageBox.Show("Name the pose!");
+				return;
+			}
+
+
+			string poseFile = Path.Combine( Config.DataPath, posec.Name + ".json" );
+			string imgFile  = Path.Combine( Config.ImagePath, posec.Name + ".png" );
+
+			JsonSerializerOptions options = new JsonSerializerOptions
+			{
+				WriteIndented = true
+			};
+			string jsonString = JsonSerializer.Serialize<PoseClass>(posec, options);
+
+			File.WriteAllText(poseFile, jsonString);
+
+			if ( useImage && File.Exists( WipImagePath ) )
+			{
+				System.Drawing.Image tmpImage = Utilities.LoadImageSafe(WipImagePath);
+
+				tmpImage.Save(imgFile, ImageFormat.Png);
+			}
+
+			if (DoRefresh) { 
+				Config.mainForm.statusLabel.Text = "Saved Pose: " + poseFile;
+
+				Task ignoredAwaitableResult = delayedWork();
+
+				Config.BPose.RefreshPoses();
+			}
 		}
 
 
 		public static void SendPoseToGame()
 		{
-			string poseFile = Path.Combine(Config.PoseDataPath, "export.txt");
-			string poseOut  = "";
+			string poseFile = Path.Combine(Config.PoseDataPath, "export.json");
 
 			JsonSerializerOptions options = new JsonSerializerOptions
 			{
@@ -57,21 +104,9 @@ namespace JTPoseDump
 			};
 			string jsonString = JsonSerializer.Serialize<PoseClass>(CurrentPose, options);
 
-			File.WriteAllText(poseFile + ".json", jsonString);
+			File.WriteAllText(poseFile, jsonString);
 
-			foreach ( string limbName in Config.LimbNames )
-			{
-				//Type type         = CurrentPose.GetType();
-				//PropertyInfo prop = type.GetProperty(limbName);
-
-				float fval = Utilities.GetPropValue<float>(CurrentPose, limbName);
-				if (fval != 0f) poseOut += limbName + ":" + fval + ",\n";
-
-			}
-
-			File.WriteAllText(poseFile, poseOut);
-
-			Config.mainForm.statusLabel.Text = "Saved Pose: " + poseFile;
+			Config.mainForm.statusLabel.Text = "Imported to Game: " + poseFile;
 
 			Task ignoredAwaitableResult = delayedWork();
 		}
@@ -83,18 +118,10 @@ namespace JTPoseDump
 			DateTime dt = DateTime.Now;
 
 			string dataName = dt.ToString("Pose_YYMMdd_HHmmss");
-			
 
-			string PoseDest = Path.Combine(Config.DataPath, "current.json");
+			if (File.Exists(WipDataPath)) File.Delete(WipDataPath);
 
-			Config.mainForm.statusLabel.Text = "Moved " + Config.PoseDataFile + " to " + PoseDest;
-
-			if (File.Exists(PoseDest))
-			{
-				File.Delete(PoseDest);
-			}
-
-			File.Move(Config.PoseDataFile, PoseDest);
+			File.Move(Config.PoseDataFile, WipDataPath);
 
 			Task ignoredAwaitableResult = delayedWork();
 
@@ -108,24 +135,32 @@ namespace JTPoseDump
 			Config.mainForm.statusLabel.Text = "Ready";
 		}
 
-		//This could be a button click event handler or the like */
 		private static void StartAsyncTimedWork()
 		{
 			Task ignoredAwaitableResult = delayedWork();
 		}
 
-
 		public static void SetCurrentData()
 		{
-			string PoseDest = Path.Combine(Config.DataPath, "current.json");
+			if (!File.Exists( WipDataPath ) ) return;
 
-			if (!File.Exists( PoseDest ) ) return;
+			string pdata = File.ReadAllText(WipDataPath).Trim();
 
-			string pdata = File.ReadAllText(PoseDest).Trim();
+			CurrentPose = JsonSerializer.Deserialize<PoseClass>(pdata);
+
+			Config.mainForm.PGrid.SelectedObject = CurrentPose;
+		}
+
+		public static void ConvertData()
+		{
+			if (!File.Exists( WipDataPath ) ) return;
+
+			string pdata = File.ReadAllText(WipDataPath).Trim();
 
 			string[] Lines = pdata.Split(',');
 
 			CurrentPose = new PoseClass();
+			Type type   = CurrentPose.GetType();
 
 			foreach ( string line in Lines ) 
 			{
@@ -135,8 +170,6 @@ namespace JTPoseDump
 
 				string limbName   = parts[0].Trim();
 				string limbAngle  = parts[1].Trim();
-
-				Type type = CurrentPose.GetType();
 
 				PropertyInfo prop = type.GetProperty(limbName);
 
@@ -150,56 +183,79 @@ namespace JTPoseDump
 
 		public static void SetCurrentPose()
 		{
-			string ImgDest = Path.Combine(Config.ImagePath, "currentpose.png");
-
-			if ( File.Exists( ImgDest ) ) 
+			if ( File.Exists( WipImagePath ) ) 
 			{
-				int flowwidth = Config.mainForm.FlowPoseSet.Width;
-				int width;
-				if (Config.PIView == PoseImageView.FullWidth) width = flowwidth;
-				else
-				{
-					if (flowwidth < 150) width = flowwidth;
-					else width = (int) flowwidth / (flowwidth / 100);
-				}
 				
-				System.Drawing.Image tmpImage = Utilities.LoadImageSafe(ImgDest);
+				System.Drawing.Image tmpImage = Utilities.LoadImageSafe(WipImagePath);
 
 				Config.mainForm.ImgCurrent.Image = Utilities.CropImage(tmpImage, 75);
 
+			} else
+			{
+
+				Config.mainForm.ImgCurrent.Image = Config.MissingImage;
 			}
 		}
 
-
-
-
-		public static void ResizePoseImages()
+		public static void Import( string importString )
 		{
-			foreach ( PictureBox picture in Config.mainForm.FlowPoseSet.Controls )
-			{
-				if (Config.PIView == PoseImageView.FullWidth)
-				{
-					picture.Width  = Config.mainForm.FlowPoseSet.Width;
-					picture.Height = picture.Width;
-				}
-				else
-				{
-					int flowwidth = Config.mainForm.FlowPoseSet.Width;
+			string p = "\"([^\"]+)\"";
 
-					if (flowwidth < 300)
+			Regex rxName = new Regex(p, RegexOptions.Compiled);
+
+			p = "\\w[^,\"]+";
+
+			Regex rxLimbs = new Regex(p, RegexOptions.Compiled);
+
+			string pattern = "{.*?}";  
+
+			Regex rx = new Regex(pattern, RegexOptions.Singleline);
+
+			MatchCollection matches = rx.Matches(importString);
+			
+			foreach ( Match m in matches )
+			{
+				PoseClass PC = new PoseClass();
+				Type type    = PC.GetType();
+
+				List<LimbAngle> limbAngles = new List<LimbAngle>();
+
+				foreach(string line in m.Value.SplitToLines()) 
+				{
+					string x = line.Trim();
+
+					//Console.WriteLine(x);
+
+					Match nm = rxName.Match(x);
+
+					if (nm.Success)
 					{
-						picture.Width  = flowwidth;
-						picture.Height = picture.Width;
-					}
+						PC.Name = nm.Groups[1].Value;
+					} 
 					else
 					{
-						picture.Width  = flowwidth / 2;
-						picture.Height = picture.Width;
+						Match pa = rxLimbs.Match(x);
+
+						if ( pa.Success )
+						{
+							LimbAngle limb    = new LimbAngle(pa.Value);
+							
+							PropertyInfo prop = type.GetProperty(limb.Name);
+
+							prop.SetValue (PC, limb.Angle, null);
+
+						}
 					}
 				}
 
+				SavePose( PC, false );
+				
 			}
-		}
+			
 
+			Config.BPose.RefreshPoses();
+
+
+		}
 	}
 }

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
 using System.Reflection;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace JTPoseDump
 {
@@ -19,18 +16,21 @@ namespace JTPoseDump
 		{
 			CreateFolders();
 
+			Config.MissingImage = LoadImageSafe( Path.Combine(Config.ResourcesPath, "missingpose.png" ) );
+
 			EditPose.SetCurrentPose();
 			EditPose.SetCurrentData();
 
+			Config.BPose.RefreshPoses();
 		}
 
 		public static void CreateFolders()
 		{
 			Config.ImagePath     = Path.Combine(Application.StartupPath, "PoseImages");
 			Config.DataPath      = Path.Combine(Application.StartupPath, "PoseData");
+			Config.ResourcesPath = Path.Combine(Application.StartupPath, "Resources");
 			Config.PoseImagePath = "C:\\pp\\Contraptions\\poserDump";
 			Config.PoseDataPath  = "C:\\pp\\poses";
-			
 			Config.PoseImageFile = "C:\\pp\\Contraptions\\poserDump\\poserDump.png";
 			Config.PoseDataFile  = "C:\\pp\\poses\\poseFile.json";
 
@@ -47,6 +47,23 @@ namespace JTPoseDump
 			DateTime dt = File.GetLastWriteTime(path);
 
 			return dt.ToString();
+		}
+
+		public static IEnumerable<string> SplitToLines(this string input)
+		{
+			if (input == null)
+			{
+				yield break;
+			}
+
+			using (System.IO.StringReader reader = new System.IO.StringReader(input))
+			{
+				string line;
+				while ((line = reader.ReadLine()) != null)
+				{
+					yield return line;
+				}
+			}
 		}
 
 
@@ -85,11 +102,10 @@ namespace JTPoseDump
 			Object retval = GetPropValue(obj, name);
 			if (retval == null) { return default(T); }
 
-			// throws InvalidCastException if types are incompatible
 			return (T) retval;
 		}
 
-		static public Image LoadImage(string imgPath)
+		public static Image LoadImage(string imgPath)
         {
             if (File.Exists(imgPath))
             {
@@ -103,7 +119,7 @@ namespace JTPoseDump
             return new System.Drawing.Bitmap(48, 48);
         }
 
-		static public Bitmap LoadImageSafe(String path)
+		public static Bitmap LoadImageSafe(String path)
 		{
 			using (Bitmap sourceImage = new Bitmap(path))
 			{
@@ -111,29 +127,39 @@ namespace JTPoseDump
 			}
 		}
 
+		public static void ScaleFont(Label lab)
+		{
+			SizeF extent  = TextRenderer.MeasureText(lab.Text, lab.Font);
+			float hRatio  = lab.Height / extent.Height;
+			float wRatio  = (lab.Width - 5) / extent.Width;
+			float ratio   = (hRatio < wRatio) ? hRatio : wRatio;
+			float newSize = lab.Font.Size * ratio;
+			lab.Font      = new Font(lab.Font.FontFamily, newSize, lab.Font.Style);
+		}
+
 		public static Bitmap CloneImage(Bitmap sourceImage)
 		{
-			Rectangle rect = new Rectangle(0, 0, sourceImage.Width, sourceImage.Height);
-			Bitmap targetImage = new Bitmap(rect.Width, rect.Height, sourceImage.PixelFormat);
+			Rectangle rect        = new Rectangle(0, 0, sourceImage.Width, sourceImage.Height);
+			Bitmap targetImage    = new Bitmap(rect.Width, rect.Height, sourceImage.PixelFormat);
 			targetImage.SetResolution(sourceImage.HorizontalResolution, sourceImage.VerticalResolution);
 			BitmapData sourceData = sourceImage.LockBits(rect, ImageLockMode.ReadOnly, sourceImage.PixelFormat);
 			BitmapData targetData = targetImage.LockBits(rect, ImageLockMode.WriteOnly, targetImage.PixelFormat);
 			Int32 actualDataWidth = ((Image.GetPixelFormatSize(sourceImage.PixelFormat) * rect.Width) + 7) / 8;
-			Int32 h = sourceImage.Height;
-			Int32 origStride = sourceData.Stride;
-			Boolean isFlipped = origStride < 0;
-			origStride = Math.Abs(origStride); // Fix for negative stride in BMP format.
-			Int32 targetStride = targetData.Stride;
-			Byte[] imageData = new Byte[actualDataWidth];
-			IntPtr sourcePos = sourceData.Scan0;
-			IntPtr destPos = targetData.Scan0;
+			Int32 h               = sourceImage.Height;
+			Int32 origStride      = sourceData.Stride;
+			Boolean isFlipped     = origStride < 0;
+			origStride            = Math.Abs(origStride); // Fix for negative stride in BMP format.
+			Int32 targetStride    = targetData.Stride;
+			Byte[] imageData      = new Byte[actualDataWidth];
+			IntPtr sourcePos      = sourceData.Scan0;
+			IntPtr destPos        = targetData.Scan0;
 			// Copy line by line, skipping by stride but copying actual data width
 			for (Int32 y = 0; y < h; y++)
 			{
 				Marshal.Copy(sourcePos, imageData, 0, actualDataWidth);
 				Marshal.Copy(imageData, 0, destPos, actualDataWidth);
 				sourcePos = new IntPtr(sourcePos.ToInt64() + origStride);
-				destPos = new IntPtr(destPos.ToInt64() + targetStride);
+				destPos   = new IntPtr(destPos.ToInt64() + targetStride);
 			}
 			targetImage.UnlockBits(targetData);
 			sourceImage.UnlockBits(sourceData);

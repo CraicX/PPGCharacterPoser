@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace JTPoseDump
 {
@@ -105,8 +101,6 @@ namespace JTPoseDump
 			if (bum.Contains('E')) num = float.Parse(bum.Substring(0,bum.IndexOf('E')-1));
 
 			string numString = num.ToString("0.0000");
-			
-			Console.WriteLine("Num:" + num + " -- str:" + bum + " -- " + numString);
 			
 			return float.Parse(numString);
 		}
