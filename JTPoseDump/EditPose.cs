@@ -126,6 +126,9 @@ namespace JTPoseDump
 
 		public static void SetCurrentData()
 		{
+			Config.mainForm.LblPoseName.Text = "";
+			
+			
 			if (!File.Exists( WipDataPath ) ) return;
 
 			string pdata = File.ReadAllText(WipDataPath).Trim();
@@ -133,6 +136,9 @@ namespace JTPoseDump
 			CurrentPose = JsonSerializer.Deserialize<PoseClass>(pdata);
 
 			Config.mainForm.PGrid.SelectedObject = CurrentPose;
+
+			Config.mainForm.LblPoseName.Text = CurrentPose.Name;
+
 		}
 
 		public static void ConvertData()
@@ -169,14 +175,12 @@ namespace JTPoseDump
 		{
 			if ( File.Exists( WipImagePath ) ) 
 			{
-				
 				System.Drawing.Image tmpImage = Utilities.LoadImageSafe(WipImagePath);
 
 				Config.mainForm.ImgCurrent.Image = Utilities.CropImage(tmpImage, 75);
 
 			} else
 			{
-
 				Config.mainForm.ImgCurrent.Image = Config.MissingImage;
 			}
 		}

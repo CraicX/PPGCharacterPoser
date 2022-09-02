@@ -18,7 +18,7 @@ namespace JTPoseDump
 
 		public PoseControl LastSelected;
 
-		FlowLayoutPanel Container;
+		public FlowLayoutPanel Container;
 
 		public BrowsePose()
 		{
@@ -49,16 +49,46 @@ namespace JTPoseDump
 			
 		}
 
-		public void Select( PoseControl pcontrol )
+		public void Select( PoseControl pcontrol, bool fromLast=false )
 		{
-			LastSelected = pcontrol;
+			
 
-			if (pcontrol.Selected)
+			if ( fromLast && LastSelected != null && Container.Controls.Contains(LastSelected))
 			{
-				if (!SelectedPoses.Contains(pcontrol.PoseName)) SelectedPoses.Add(pcontrol.PoseName);
-				else if (SelectedPoses.Contains(pcontrol.PoseName)) SelectedPoses.Remove(pcontrol.PoseName);
+				int flagCount = 0;
+				int allc = Container.Controls.Count;
+
+				foreach(PoseControl pcont in Container.Controls)
+				{
+					if (flagCount == 1) pcont.Selected = pcontrol.Selected;
+					if (pcont == pcontrol) flagCount++;
+					if (pcont == LastSelected) flagCount++;
+					
+					if (pcont.Selected)
+					{
+						if (!SelectedPoses.Contains(pcont.PoseName)) SelectedPoses.Add(pcont.PoseName);
+					} 
+					else
+					{
+						if (SelectedPoses.Contains(pcont.PoseName)) SelectedPoses.Remove(pcont.PoseName);
+					}
+					
+				}
+			} else
+			{
+
+				if (pcontrol.Selected)
+				{
+					if (!SelectedPoses.Contains(pcontrol.PoseName)) SelectedPoses.Add(pcontrol.PoseName);
+				} 
+				else
+				{
+					if (SelectedPoses.Contains(pcontrol.PoseName)) SelectedPoses.Remove(pcontrol.PoseName);
+				}
+
 			}
 
+			LastSelected = pcontrol;
 			
 
 			if (SelectedPoses.Count > 0) Config.mainForm.lblSelected.Text = SelectedPoses.Count + " selected";
@@ -90,9 +120,10 @@ namespace JTPoseDump
 				
 				if( FileName.EndsWith("json"))
 				{
-					PoseObject pobj = new PoseObject();
-					
-					pobj.JsonDump   = File.ReadAllText(FileName);
+					PoseObject pobj = new PoseObject
+					{
+						JsonDump = File.ReadAllText( FileName )
+					};
 					pobj.PoseClass  = JsonSerializer.Deserialize<PoseClass>(pobj.JsonDump);
 					pobj.PoseName   = pobj.PoseClass.Name;
 					pobj.ImagePath  = Path.Combine(Config.ImagePath, pobj.PoseName + ".png");

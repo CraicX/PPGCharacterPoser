@@ -26,6 +26,10 @@ namespace JTPoseDump
 				{
 					Label.BackColor = Color.Aqua;
 					Label.ForeColor = Color.Black;
+				} else
+				{
+					Label.BackColor = Color.Silver;
+					Label.ForeColor = Color.Black;
 				}
 			}
 		}
@@ -53,10 +57,15 @@ namespace JTPoseDump
 
 		private void PicBox_Click( object sender, EventArgs e )
 		{
-			if (Control.ModifierKeys == Keys.Shift ) { 
+			if (Control.ModifierKeys == Keys.Control ) { 
 				
 				Selected = !_selected;
 				Config.BPose.Select(this);
+
+			}  else if (Control.ModifierKeys == Keys.Shift ) { 
+				
+				Selected = !_selected;
+				Config.BPose.Select(this, true);
 
 			} else
 			{

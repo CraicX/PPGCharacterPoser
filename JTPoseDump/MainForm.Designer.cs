@@ -288,7 +288,8 @@
 			// 
 			this.LblPoseCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 			this.LblPoseCount.Name = "LblPoseCount";
-			this.LblPoseCount.Size = new System.Drawing.Size(49, 22);
+			this.LblPoseCount.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+			this.LblPoseCount.Size = new System.Drawing.Size(59, 22);
 			this.LblPoseCount.Text = "Poses: 0";
 			// 
 			// lblSelected
@@ -341,12 +342,15 @@
 			// 
 			// RTB
 			// 
-			this.RTB.BackColor = System.Drawing.Color.DarkGray;
+			this.RTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.RTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.RTB.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.RTB.ForeColor = System.Drawing.Color.Wheat;
 			this.RTB.Location = new System.Drawing.Point(0, 344);
 			this.RTB.Margin = new System.Windows.Forms.Padding(0);
 			this.RTB.Name = "RTB";
+			this.RTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.RTB.Size = new System.Drawing.Size(321, 72);
 			this.RTB.TabIndex = 5;
 			this.RTB.Text = "";
@@ -374,7 +378,6 @@
 			this.LblPoseName.Name = "LblPoseName";
 			this.LblPoseName.Size = new System.Drawing.Size(321, 23);
 			this.LblPoseName.TabIndex = 7;
-			this.LblPoseName.Text = "PoseName";
 			this.LblPoseName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// toolStrip1
