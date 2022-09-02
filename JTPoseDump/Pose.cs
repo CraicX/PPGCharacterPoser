@@ -24,9 +24,11 @@ namespace JTPoseDump
 		private float _FootFront     = 0f;
 		private string _ConfigName   = "";
 
+		public bool DoAuto = false;
+
 		private bool _Animated = false, _ShouldStumble = false, _ShouldStandUpright = true;
 			
-		private float _Rigidity = 1.3f, _DragInfluence=0f, _UprightForceMultiplier = 2f, _AnimationSpeedMultiplier = 1.5f, _PoseRigidityModifier=0f;
+		private float _Rigidity = 1.3f, _DragInfluence=1f, _UprightForceMultiplier = 2f, _AnimationSpeedMultiplier = 1.5f, _PoseRigidityModifier=0f;
 
 		private PoseStates _PoseState = PoseStates.Rest;
 		
@@ -90,7 +92,7 @@ namespace JTPoseDump
 		[Category( "Settings" ), Description( "" ), Browsable( true )]
 		public float DragInfluence
 		{
-			get { return _DragInfluence; }
+			get { return _DragInfluence == 0 ? 1 : _DragInfluence; }
 			set { _DragInfluence = value; }
 		}
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
-
+using System.Text;
 namespace JTPoseDump
 {
 
@@ -49,14 +48,30 @@ namespace JTPoseDump
 			
 		}
 
+		public void Delete()
+		{
+			foreach(PoseControl pcont in Container.Controls)
+			{
+				if ( pcont.Selected )
+				{
+					if ( File.Exists( pcont.ImagePath ) ) File.Delete(pcont.ImagePath);
+
+					if ( File.Exists( pcont.DataPath ) ) File.Delete(pcont.DataPath);
+				}
+			}
+			
+			SelectedPoses.Clear();
+			Refresh();
+			Config.mainForm.lblSelected.Text = "";
+
+		}
+
 		public void Select( PoseControl pcontrol, bool fromLast=false )
 		{
-			
-
+			Config.mainForm.RTB.Text = "";
 			if ( fromLast && LastSelected != null && Container.Controls.Contains(LastSelected))
 			{
 				int flagCount = 0;
-				int allc = Container.Controls.Count;
 
 				foreach(PoseControl pcont in Container.Controls)
 				{
@@ -91,8 +106,55 @@ namespace JTPoseDump
 			LastSelected = pcontrol;
 			
 
-			if (SelectedPoses.Count > 0) Config.mainForm.lblSelected.Text = SelectedPoses.Count + " selected";
+			if (SelectedPoses.Count > 0) {
+				Config.mainForm.lblSelected.Text = SelectedPoses.Count + " selected";
+				GenerateExport();
+			}
 			else Config.mainForm.lblSelected.Text = "";
+
+
+
+		}
+
+		public void GenerateExport()
+		{
+
+			StringBuilder SB = new StringBuilder();
+
+			string tabs = new string('\t', 1);
+
+			string openBracket  = "{";
+			string closeBracket = "}";
+
+			foreach( PoseObject pObj in PoseObjects )
+			{
+				if (pObj.PoseControl.Selected)
+				{
+					SB.AppendFormat("{0}{1} \"{2}\",\n", tabs, openBracket, pObj.PoseControl.PoseName );
+					bool firstLimb = true;
+					foreach ( string limb in Config.LimbNames )
+					{
+						float angle = Utilities.GetPropValue<float>( pObj.PoseClass, limb );
+
+						if (angle == 0) continue;
+					
+						if ( firstLimb )
+						{
+							firstLimb = false;
+							SB.AppendFormat("{0}  @\"{1}:{2}", tabs, limb, angle );
+						}
+						else
+						{
+							SB.AppendFormat(",\n{0}    {1}:{2}", tabs, limb, angle );
+						}
+					}
+
+					SB.AppendFormat("\"\n{0}{1},\n\n", tabs, closeBracket );
+				}
+			}
+
+			Config.mainForm.RTB.Text = SB.ToString();
+
 
 		}
 

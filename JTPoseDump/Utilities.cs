@@ -101,7 +101,7 @@ namespace JTPoseDump
 
 		public static T GetPropValue<T>(this Object obj, String name) {
 			Object retval = GetPropValue(obj, name);
-			if (retval == null) { return default(T); }
+			if (retval == null) { return default; }
 
 			return (T) retval;
 		}

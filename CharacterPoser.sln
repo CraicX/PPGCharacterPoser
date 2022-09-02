@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JTPoseDump", "JTPoseDump\JTPoseDump.csproj", "{0DD1FF4D-83B9-4937-8F44-DC8F91CB48F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mods", "..\Mods\Mods.csproj", "{7787135A-ABAD-4236-9541-CE80B0681855}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mods", "JTPD-Config\Mods.csproj", "{7787135A-ABAD-4236-9541-CE80B0681855}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

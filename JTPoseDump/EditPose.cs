@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.IO;
-using System.Windows.Forms;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
-using System.Collections.Generic;
+using System.Text;
 
 namespace JTPoseDump
 {
@@ -16,7 +14,7 @@ namespace JTPoseDump
 		public static string WipImagePath    = Path.Combine(Config.ImagePath, "currentpose.png");
 		public static string WipDataPath     = Path.Combine(Config.DataPath, "current.json");
 
-		public static void Edit( PoseObject poseObject )
+		public static void Edit( PoseObject poseObject, bool doAuto=false )
 		{
 			CurrentPose = poseObject.PoseClass;
 
@@ -29,9 +27,45 @@ namespace JTPoseDump
 			SetCurrentData();
 			SetCurrentPose();
 
-			SendPoseToGame();
+			SendPoseToGame(doAuto);
+
+			if (Config.BPose.SelectedPoses.Count == 0) GenerateExport(); 
 		}
 
+
+		public static void GenerateExport()
+		{
+			StringBuilder SB = new StringBuilder();
+
+			string tabs = new string('\t', 1);
+
+			string openBracket  = "{";
+			string closeBracket = "}";
+
+			
+			SB.AppendFormat("{0}{1} \"{2}\",\n", tabs, openBracket, CurrentPose.Name );
+			bool firstLimb = true;
+			foreach ( string limb in Config.LimbNames )
+			{
+				float angle = Utilities.GetPropValue<float>( CurrentPose, limb );
+
+				if (angle == 0) continue;
+					
+				if ( firstLimb )
+				{
+					firstLimb = false;
+					SB.AppendFormat("{0}  @\"{1}:{2}", tabs, limb, angle );
+				}
+				else
+				{
+					SB.AppendFormat(",\n{0}    {1}:{2}", tabs, limb, angle );
+				}
+			}
+
+			SB.AppendFormat("\"\n{0}{1},\n\n", tabs, closeBracket );
+
+			Config.mainForm.RTB.Text = SB.ToString();
+		}
 
 		public static void ResetPoseImage()
 		{
@@ -90,9 +124,17 @@ namespace JTPoseDump
 		}
 
 
-		public static void SendPoseToGame()
+		public static void SendPoseToGame(bool doAuto = false)
 		{
-			string poseFile = Path.Combine(Config.PoseDataPath, "export.json");
+
+			string poseFile;
+			
+			poseFile = Path.Combine(Config.PoseDataPath, "export.json");
+
+			if (doAuto) {
+				poseFile = Path.Combine(Config.PoseDataPath, "exportauto.json");
+				Console.WriteLine("Sent Auto: " + poseFile);
+			}
 
 			JsonSerializerOptions options = new JsonSerializerOptions
 			{

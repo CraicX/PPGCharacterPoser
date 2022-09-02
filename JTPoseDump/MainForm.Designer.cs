@@ -53,7 +53,6 @@
 			this.AMid = new System.Windows.Forms.Panel();
 			this.PGrid = new System.Windows.Forms.PropertyGrid();
 			this.ALeft = new System.Windows.Forms.Panel();
-			this.RTB = new System.Windows.Forms.RichTextBox();
 			this.ImgCurrent = new System.Windows.Forms.PictureBox();
 			this.LblPoseName = new System.Windows.Forms.Label();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -63,7 +62,10 @@
 			this.BtnImport = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.BtnSendToGame = new System.Windows.Forms.ToolStripButton();
-			this.BtnSwapImage = new System.Windows.Forms.ToolStripButton();
+			this.BtnAutoSwap = new System.Windows.Forms.ToolStripButton();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.RTB = new System.Windows.Forms.RichTextBox();
+			this.BtnSwap = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1.SuspendLayout();
 			this.AAA.SuspendLayout();
 			this.ARight.SuspendLayout();
@@ -72,6 +74,7 @@
 			this.ALeft.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ImgCurrent)).BeginInit();
 			this.toolStrip1.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
@@ -211,7 +214,7 @@
 			this.BtnShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnShowGrid.Name = "BtnShowGrid";
 			this.BtnShowGrid.Size = new System.Drawing.Size(23, 22);
-			this.BtnShowGrid.Text = "toolStripButton4";
+			this.BtnShowGrid.ToolTipText = "Small Grid View";
 			// 
 			// BtnShowFullWidth
 			// 
@@ -222,7 +225,7 @@
 			this.BtnShowFullWidth.Margin = new System.Windows.Forms.Padding(0);
 			this.BtnShowFullWidth.Name = "BtnShowFullWidth";
 			this.BtnShowFullWidth.Size = new System.Drawing.Size(23, 25);
-			this.BtnShowFullWidth.ToolTipText = "Full Width";
+			this.BtnShowFullWidth.ToolTipText = "Full Grid View";
 			// 
 			// toolStripSeparator4
 			// 
@@ -237,7 +240,7 @@
 			this.BtnReload.Margin = new System.Windows.Forms.Padding(0);
 			this.BtnReload.Name = "BtnReload";
 			this.BtnReload.Size = new System.Drawing.Size(23, 25);
-			this.BtnReload.Text = "toolStripButton1";
+			this.BtnReload.ToolTipText = "Refresh Poses";
 			// 
 			// toolStripSeparator5
 			// 
@@ -251,7 +254,7 @@
 			this.BtnFavorite.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnFavorite.Name = "BtnFavorite";
 			this.BtnFavorite.Size = new System.Drawing.Size(23, 22);
-			this.BtnFavorite.Text = "toolStripButton2";
+			this.BtnFavorite.ToolTipText = "Toggle Favorite";
 			// 
 			// toolStripSeparator6
 			// 
@@ -265,7 +268,8 @@
 			this.BtnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnDelete.Name = "BtnDelete";
 			this.BtnDelete.Size = new System.Drawing.Size(23, 22);
-			this.BtnDelete.Text = "toolStripButton1";
+			this.BtnDelete.ToolTipText = "Delete Pose";
+			this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
 			// 
 			// TxtFilter
 			// 
@@ -330,7 +334,7 @@
 			// 
 			// ALeft
 			// 
-			this.ALeft.Controls.Add(this.RTB);
+			this.ALeft.Controls.Add(this.panel1);
 			this.ALeft.Controls.Add(this.ImgCurrent);
 			this.ALeft.Controls.Add(this.LblPoseName);
 			this.ALeft.Dock = System.Windows.Forms.DockStyle.Left;
@@ -339,21 +343,6 @@
 			this.ALeft.Name = "ALeft";
 			this.ALeft.Size = new System.Drawing.Size(321, 416);
 			this.ALeft.TabIndex = 0;
-			// 
-			// RTB
-			// 
-			this.RTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.RTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.RTB.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.RTB.ForeColor = System.Drawing.Color.Wheat;
-			this.RTB.Location = new System.Drawing.Point(0, 344);
-			this.RTB.Margin = new System.Windows.Forms.Padding(0);
-			this.RTB.Name = "RTB";
-			this.RTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.RTB.Size = new System.Drawing.Size(321, 72);
-			this.RTB.TabIndex = 5;
-			this.RTB.Text = "";
 			// 
 			// ImgCurrent
 			// 
@@ -390,7 +379,8 @@
             this.BtnImport,
             this.toolStripSeparator2,
             this.BtnSendToGame,
-            this.BtnSwapImage});
+            this.BtnAutoSwap,
+            this.BtnSwap});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(972, 25);
@@ -404,7 +394,7 @@
 			this.BtnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnNew.Name = "BtnNew";
 			this.BtnNew.Size = new System.Drawing.Size(23, 22);
-			this.BtnNew.Text = "toolStripButton4";
+			this.BtnNew.ToolTipText = "New Pose";
 			// 
 			// BtnSave
 			// 
@@ -413,7 +403,7 @@
 			this.BtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnSave.Name = "BtnSave";
 			this.BtnSave.Size = new System.Drawing.Size(23, 22);
-			this.BtnSave.Text = "toolStripButton2";
+			this.BtnSave.ToolTipText = "Save Pose";
 			// 
 			// toolStripSeparator1
 			// 
@@ -427,7 +417,7 @@
 			this.BtnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnImport.Name = "BtnImport";
 			this.BtnImport.Size = new System.Drawing.Size(23, 22);
-			this.BtnImport.Text = "toolStripButton1";
+			this.BtnImport.ToolTipText = "Import from Text";
 			// 
 			// toolStripSeparator2
 			// 
@@ -441,16 +431,55 @@
 			this.BtnSendToGame.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnSendToGame.Name = "BtnSendToGame";
 			this.BtnSendToGame.Size = new System.Drawing.Size(23, 22);
-			this.BtnSendToGame.Text = "toolStripButton6";
+			this.BtnSendToGame.ToolTipText = "Send Current Pose To Game";
 			// 
-			// BtnSwapImage
+			// BtnAutoSwap
 			// 
-			this.BtnSwapImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.BtnSwapImage.Image = global::JTPoseDump.Properties.Resources.Switch_User;
-			this.BtnSwapImage.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.BtnSwapImage.Name = "BtnSwapImage";
-			this.BtnSwapImage.Size = new System.Drawing.Size(23, 22);
-			this.BtnSwapImage.Text = "toolStripButton1";
+			this.BtnAutoSwap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnAutoSwap.Image = global::JTPoseDump.Properties.Resources.Switch_User;
+			this.BtnAutoSwap.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnAutoSwap.Name = "BtnAutoSwap";
+			this.BtnAutoSwap.Size = new System.Drawing.Size(23, 22);
+			this.BtnAutoSwap.ToolTipText = "Toggle AutoSwaps";
+			this.BtnAutoSwap.Click += new System.EventHandler(this.BtnAutoSwap_Click);
+			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel1.Controls.Add(this.RTB);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(0, 344);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
+			this.panel1.Name = "panel1";
+			this.panel1.Padding = new System.Windows.Forms.Padding(15);
+			this.panel1.Size = new System.Drawing.Size(321, 72);
+			this.panel1.TabIndex = 8;
+			// 
+			// RTB
+			// 
+			this.RTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.RTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.RTB.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.RTB.ForeColor = System.Drawing.Color.Wheat;
+			this.RTB.Location = new System.Drawing.Point(15, 15);
+			this.RTB.Margin = new System.Windows.Forms.Padding(10);
+			this.RTB.Name = "RTB";
+			this.RTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.RTB.Size = new System.Drawing.Size(291, 42);
+			this.RTB.TabIndex = 6;
+			this.RTB.Text = "";
+			this.RTB.WordWrap = false;
+			// 
+			// BtnSwap
+			// 
+			this.BtnSwap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.BtnSwap.Image = global::JTPoseDump.Properties.Resources.Person_Check;
+			this.BtnSwap.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.BtnSwap.Name = "BtnSwap";
+			this.BtnSwap.Size = new System.Drawing.Size(23, 22);
+			this.BtnSwap.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.BtnSwap.Click += new System.EventHandler(this.BtnSwap_Click);
 			// 
 			// MainForm
 			// 
@@ -480,6 +509,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.ImgCurrent)).EndInit();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -508,7 +538,6 @@
         public System.Windows.Forms.Panel AMid;
         public System.Windows.Forms.PropertyGrid PGrid;
         public System.Windows.Forms.Panel ALeft;
-        public System.Windows.Forms.RichTextBox RTB;
         public System.Windows.Forms.PictureBox ImgCurrent;
         public System.Windows.Forms.Label LblPoseName;
         public System.Windows.Forms.ToolStrip toolStrip1;
@@ -518,8 +547,11 @@
         public System.Windows.Forms.ToolStripButton BtnImport;
         public System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         public System.Windows.Forms.ToolStripButton BtnSendToGame;
-        public System.Windows.Forms.ToolStripButton BtnSwapImage;
+        public System.Windows.Forms.ToolStripButton BtnAutoSwap;
 		public System.Windows.Forms.ToolStripLabel lblSelected;
-	}
+        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.RichTextBox RTB;
+        private System.Windows.Forms.ToolStripButton BtnSwap;
+    }
 }
 

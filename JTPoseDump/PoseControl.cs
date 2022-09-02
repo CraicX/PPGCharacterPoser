@@ -9,10 +9,11 @@ namespace JTPoseDump
 	{
 		public PoseObject poseObject;
 
+		public bool DoAuto = false;
 		private bool _selected = false;
 
-		private Image ImageZoomIn;
-		private Image ImageZoomOut;
+		private readonly Image ImageZoomIn;
+		private readonly Image ImageZoomOut;
 
 
 		public bool Selected
@@ -34,6 +35,9 @@ namespace JTPoseDump
 			}
 		}
 
+		public string ImagePath => poseObject.ImagePath;
+		public string DataPath => poseObject.DataPath;
+
 		public string PoseName {get; set;}
 
 
@@ -53,10 +57,26 @@ namespace JTPoseDump
 			PicBox.Image = ImageZoomOut;
 
 			if (Config.BPose.SelectedPoses.Contains(PoseName)) Selected = true;
+
+			PicBox.DoubleClick += new System.EventHandler(this.PicBox_DoubleClick);
+		}
+
+		private void PicBox_DoubleClick( object sender, EventArgs e )
+		{
+			//
+			if (Config.DoAutoSwap) {
+				poseObject.PoseClass.DoAuto = DoAuto = true;
+				Console.WriteLine("DOUBLE CLICKED");
+				EditPose.CurrentPose.DoAuto = true;
+				EditPose.Edit(poseObject, true);
+				EditPose.CurrentPose.DoAuto = true;
+			}
 		}
 
 		private void PicBox_Click( object sender, EventArgs e )
 		{
+			Console.WriteLine("CLICKED");
+			DoAuto = poseObject.PoseClass.DoAuto = false;
 			if (Control.ModifierKeys == Keys.Control ) { 
 				
 				Selected = !_selected;

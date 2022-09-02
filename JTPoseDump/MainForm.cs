@@ -14,7 +14,7 @@ namespace JTPoseDump
 
 			Utilities.Setup();
 
-			Height = 700;
+			Height = 660;
 			Width  = 1010;
 
 			BtnImport.Click              += new System.EventHandler(BtnImport_Click);
@@ -23,7 +23,7 @@ namespace JTPoseDump
 			BtnSendToGame.Click          += new System.EventHandler(BtnSendToGame_Click);
 			BtnShowFullWidth.Click       += new System.EventHandler(BtnShowFullWidth_Click);
 			BtnShowGrid.Click            += new System.EventHandler(BtnShowGrid_Click);
-			BtnSwapImage.Click           += new System.EventHandler(BtnSwapImage_Click);
+			BtnAutoSwap.Click            += new System.EventHandler(BtnSwapImage_Click);
 			TxtFilter.KeyUp              += new KeyEventHandler(TxtFilter_KeyUp);
 			
 		}
@@ -109,11 +109,31 @@ namespace JTPoseDump
 
 		private void BtnSwapImage_Click( object sender, EventArgs e )
 		{
-			Config.DoImageSwap = !Config.DoImageSwap;
-
-			BtnSwapImage.Checked = Config.DoImageSwap;
+			
 		}
 
-		
+        private void BtnDelete_Click( object sender, EventArgs e )
+        {
+			if ( Config.BPose.SelectedPoses.Count > 0 )
+			{
+				DialogResult result1 = MessageBox.Show("Delete the " + Config.BPose.SelectedPoses.Count + " selected poses?",
+                "Delete",
+                MessageBoxButtons.YesNo);
+
+				if (result1 == DialogResult.Yes) Config.BPose.Delete();
+			}
+        }
+
+		private void BtnSwap_Click( object sender, EventArgs e )
+		{
+			Config.DoImageSwap   = !Config.DoImageSwap;
+			BtnSwap.Checked      = Config.DoImageSwap;
+		}
+
+		private void BtnAutoSwap_Click( object sender, EventArgs e )
+		{
+			Config.DoAutoSwap   = !Config.DoAutoSwap;
+			BtnAutoSwap.Checked = Config.DoAutoSwap;
+		}
 	}
 }

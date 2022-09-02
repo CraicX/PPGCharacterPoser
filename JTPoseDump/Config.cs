@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace JTPoseDump
 {
@@ -27,9 +21,11 @@ namespace JTPoseDump
 		public static Image MissingImage;
 
 		public static bool DoImageSwap = false;
+		public static bool DoAutoSwap  = false;
 
 		private static PoseImageView _PIView = PoseImageView.GridView;
 
+		public static int TabsExport = 3;
 
 		public static string[] LimbNames =
 		{

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Reflection;
-
+using System.Collections;
 
 namespace PoseDump
 {
@@ -82,14 +82,69 @@ namespace PoseDump
 
 		public static int poseID;
 
+		public static bool DoAutoSwap = false;
+
+		public static string AutoFile = "C:\\pp\\poses\\exportauto.json";
+
+
 		public static Dictionary<string, LimbMove> moves = new Dictionary<string, LimbMove>();
 
+		IEnumerator ICheckAuto()
+		{
+			for (; ; )
+			{
+				if (File.Exists(AutoFile))
+				{
+					string jsonSource = File.ReadAllText(AutoFile);
+
+					PoseClass poseClass = JsonConvert.DeserializeObject<PoseClass>(jsonSource);
+
+					List<PersonBehaviour> People = new List<PersonBehaviour>();
+
+					foreach (PhysicalBehaviour PB in GetSelected())
+					{
+						PersonBehaviour person = PB.gameObject.GetComponentInParent<PersonBehaviour>();
+
+						if (!person || People.Contains(person)) continue; 
+
+						People.Add(person);
+					}
+
+					foreach ( PersonBehaviour PBO in People )
+					{
+						ImportPose(PBO, poseClass);
+
+						PBO.OverridePoseIndex = poseID;
+					}
+
+					File.Delete(AutoFile);
+				}
+
+				yield return new WaitForSeconds(1);
+			}
+		}
+
+		public void Start()
+		{
+			StartCoroutine(ICheckAuto());
+		}
 
 
 		public void Update()
 		{
+			bool ModifierKey = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+			
 			if (PoseMain.KeyCheck("JTPD-dumpPose")) DumpPose(GetSelected());
-			if (PoseMain.KeyCheck("JTPD-doPose")) ActivatePose(GetSelected());
+			if (PoseMain.KeyCheck("JTPD-doPose")) {
+				if (ModifierKey) {
+					DoAutoSwap = !DoAutoSwap;
+					ModAPI.Notify("AutoSwap is " + (DoAutoSwap ? "<color=yellow>Active" : "<color=red>off"));
+				}
+				else ActivatePose(GetSelected());
+			}
+
+			
+			
 		}
 
 		static PoseConfig GetConfig( string configName ) => ( PoseConfigs.TryGetValue( configName, out PoseConfig config ) ) 
