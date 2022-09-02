@@ -85,8 +85,6 @@ namespace JTPoseDump
 			if (DoRefresh) { 
 				Config.mainForm.statusLabel.Text = "Saved Pose: " + poseFile;
 
-				Task ignoredAwaitableResult = delayedWork();
-
 				Config.BPose.Refresh();
 			}
 		}
@@ -106,16 +104,11 @@ namespace JTPoseDump
 
 			Config.mainForm.statusLabel.Text = "Imported to Game: " + poseFile;
 
-			Task ignoredAwaitableResult = delayedWork();
 		}
 
 		public static void ResetPoseData()
 		{
 			if (!File.Exists(Config.PoseDataFile)) return;
-
-			DateTime dt = DateTime.Now;
-
-			string dataName = dt.ToString("Pose_YYMMdd_HHmmss");
 
 			if (Config.DoImageSwap)
 			{
@@ -128,21 +121,7 @@ namespace JTPoseDump
 
 			File.Move(Config.PoseDataFile, WipDataPath);
 
-			Task ignoredAwaitableResult = delayedWork();
-
 			SetCurrentData();
-		}
-
-		private static async Task delayedWork()
-		{
-			await Task.Delay(5000);
-
-			Config.mainForm.statusLabel.Text = "Ready";
-		}
-
-		private static void StartAsyncTimedWork()
-		{
-			Task ignoredAwaitableResult = delayedWork();
 		}
 
 		public static void SetCurrentData()
@@ -222,8 +201,6 @@ namespace JTPoseDump
 			{
 				PoseClass PC = new PoseClass();
 				Type type    = PC.GetType();
-
-				List<LimbAngle> limbAngles = new List<LimbAngle>();
 
 				foreach(string line in m.Value.SplitToLines()) 
 				{

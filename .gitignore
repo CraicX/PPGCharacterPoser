@@ -4,3 +4,6 @@
 
 /.vs
 /JTPoseDump/obj/Debug
+/JTPoseDump/bin/Debug
+/JTPoseDump/obj
+/packages
