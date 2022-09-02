@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.IO;
 
 namespace JTPoseDump
 {
@@ -12,6 +13,19 @@ namespace JTPoseDump
 			Config.mainForm = this;
 
 			Utilities.Setup();
+
+			Height = 700;
+			Width  = 1010;
+
+			BtnImport.Click              += new System.EventHandler(BtnImport_Click);
+			BtnReload.Click              += new System.EventHandler(BtnReload_Click);
+			BtnSave.Click                += new System.EventHandler(BtnSave_Click);
+			BtnSendToGame.Click          += new System.EventHandler(BtnSendToGame_Click);
+			BtnShowFullWidth.Click       += new System.EventHandler(BtnShowFullWidth_Click);
+			BtnShowGrid.Click            += new System.EventHandler(BtnShowGrid_Click);
+			BtnSwapImage.Click           += new System.EventHandler(BtnSwapImage_Click);
+			TxtFilter.KeyUp              += new KeyEventHandler(TxtFilter_KeyUp);
+			
 		}
 
         private void MenuExit_Click( object sender, EventArgs e )
@@ -34,10 +48,16 @@ namespace JTPoseDump
 
 			if (Config.PoseDataFile != null)
 			{
+				
 				string DataHash = Utilities.GetLastTime(Config.PoseDataFile);
 				
 				if (DataHash != Config.LastDataTime)
 				{
+					if (Config.DoImageSwap)
+					{
+						if (File.Exists(Config.PoseDataFile)) File.Delete(Config.PoseDataFile);
+						return;
+					}
 					Config.LastDataTime = DataHash;
 					EditPose.ResetPoseData();
 				}
@@ -71,20 +91,10 @@ namespace JTPoseDump
 
 		private void BtnReload_Click( object sender, EventArgs e )
 		{
-			Config.BPose.RefreshPoses();
+			Config.BPose.Refresh();
 		}
 
-		private void BtnShowGrid_Click_1( object sender, EventArgs e )
-		{
-			BtnShowFullWidth.Checked = false;
-			Config.PIView = PoseImageView.GridView;
-		}
-
-		private void BtnShowFullWidth_Click_1( object sender, EventArgs e )
-		{
-			BtnShowGrid.Checked = false;
-			Config.PIView = PoseImageView.FullWidth;
-		}
+		
 
 		private void TxtFilter_KeyUp( object sender, KeyEventArgs e )
 		{
@@ -96,5 +106,14 @@ namespace JTPoseDump
 		{
 			EditPose.Import(RTB.Text);
 		}
+
+		private void BtnSwapImage_Click( object sender, EventArgs e )
+		{
+			Config.DoImageSwap = !Config.DoImageSwap;
+
+			BtnSwapImage.Checked = Config.DoImageSwap;
+		}
+
+		
 	}
 }

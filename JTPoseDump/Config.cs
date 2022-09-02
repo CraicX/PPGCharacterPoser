@@ -22,9 +22,11 @@ namespace JTPoseDump
 		public static string LastDataTime  = "";
 
 		public static MainForm mainForm;
-		public static BrowsePose BPose = new BrowsePose();
+		public static BrowsePose BPose;
 
 		public static Image MissingImage;
+
+		public static bool DoImageSwap = false;
 
 		private static PoseImageView _PIView = PoseImageView.GridView;
 

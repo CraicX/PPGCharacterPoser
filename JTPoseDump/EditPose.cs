@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
-using Xamarin.Forms.Internals;
 
 namespace JTPoseDump
 {
@@ -30,6 +29,7 @@ namespace JTPoseDump
 			SetCurrentData();
 			SetCurrentPose();
 
+			SendPoseToGame();
 		}
 
 
@@ -41,15 +41,13 @@ namespace JTPoseDump
 
 			File.Move(Config.PoseImageFile, WipImagePath);
 
-			Task ignoredAwaitableResult = delayedWork();
-
-			if (Config.mainForm.FlowPoseSet.Controls.Count > 0 )
-			{
-				for(int i = Config.mainForm.FlowPoseSet.Controls.Count; --i >= 0;)
-				{
-					Config.mainForm.FlowPoseSet.Controls[i].Dispose();
-				}
-			}
+			//if (Config.mainForm.FlowPoseSet.Controls.Count > 0 )
+			//{
+			//	for(int i = Config.mainForm.FlowPoseSet.Controls.Count; --i >= 0;)
+			//	{
+			//		Config.mainForm.FlowPoseSet.Controls[i].Dispose();
+			//	}
+			//}
 
 			SetCurrentPose();
 		}
@@ -89,7 +87,7 @@ namespace JTPoseDump
 
 				Task ignoredAwaitableResult = delayedWork();
 
-				Config.BPose.RefreshPoses();
+				Config.BPose.Refresh();
 			}
 		}
 
@@ -118,6 +116,13 @@ namespace JTPoseDump
 			DateTime dt = DateTime.Now;
 
 			string dataName = dt.ToString("Pose_YYMMdd_HHmmss");
+
+			if (Config.DoImageSwap)
+			{
+				if (File.Exists(Config.PoseDataFile)) File.Delete(Config.PoseDataFile);
+
+				return;
+			}
 
 			if (File.Exists(WipDataPath)) File.Delete(WipDataPath);
 
@@ -253,7 +258,7 @@ namespace JTPoseDump
 			}
 			
 
-			Config.BPose.RefreshPoses();
+			Config.BPose.Refresh();
 
 
 		}

@@ -21,7 +21,8 @@ namespace JTPoseDump
 			EditPose.SetCurrentPose();
 			EditPose.SetCurrentData();
 
-			Config.BPose.RefreshPoses();
+			Config.BPose = new BrowsePose();
+			Config.BPose.Refresh();
 		}
 
 		public static void CreateFolders()
@@ -132,6 +133,7 @@ namespace JTPoseDump
 			SizeF extent  = TextRenderer.MeasureText(lab.Text, lab.Font);
 			float hRatio  = lab.Height / extent.Height;
 			float wRatio  = (lab.Width - 5) / extent.Width;
+			if (hRatio > 100 || wRatio > 100) return;
 			float ratio   = (hRatio < wRatio) ? hRatio : wRatio;
 			float newSize = lab.Font.Size * ratio;
 			lab.Font      = new Font(lab.Font.FontFamily, newSize, lab.Font.Style);
