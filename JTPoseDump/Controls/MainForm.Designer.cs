@@ -224,7 +224,7 @@
 			this.BtnShowFullWidth.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnShowFullWidth.Margin = new System.Windows.Forms.Padding(0);
 			this.BtnShowFullWidth.Name = "BtnShowFullWidth";
-			this.BtnShowFullWidth.Size = new System.Drawing.Size(23, 20);
+			this.BtnShowFullWidth.Size = new System.Drawing.Size(23, 34);
 			this.BtnShowFullWidth.ToolTipText = "Full Grid View";
 			// 
 			// BtnReload
@@ -243,7 +243,7 @@
 			this.BtnFavorite.Image = global::JTPoseDump.Properties.Resources.Star;
 			this.BtnFavorite.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnFavorite.Name = "BtnFavorite";
-			this.BtnFavorite.Size = new System.Drawing.Size(23, 22);
+			this.BtnFavorite.Size = new System.Drawing.Size(23, 31);
 			this.BtnFavorite.ToolTipText = "Toggle Favorite";
 			// 
 			// BtnDelete
@@ -252,7 +252,7 @@
 			this.BtnDelete.Image = global::JTPoseDump.Properties.Resources.Close;
 			this.BtnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnDelete.Name = "BtnDelete";
-			this.BtnDelete.Size = new System.Drawing.Size(23, 22);
+			this.BtnDelete.Size = new System.Drawing.Size(23, 31);
 			this.BtnDelete.ToolTipText = "Delete Pose";
 			this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
 			// 
@@ -273,7 +273,7 @@
 			this.LblPoseCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
 			this.LblPoseCount.Name = "LblPoseCount";
 			this.LblPoseCount.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-			this.LblPoseCount.Size = new System.Drawing.Size(59, 22);
+			this.LblPoseCount.Size = new System.Drawing.Size(59, 31);
 			this.LblPoseCount.Text = "Poses: 0";
 			// 
 			// lblSelected
@@ -282,7 +282,7 @@
 			this.lblSelected.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.lblSelected.ForeColor = System.Drawing.Color.MediumBlue;
 			this.lblSelected.Name = "lblSelected";
-			this.lblSelected.Size = new System.Drawing.Size(0, 22);
+			this.lblSelected.Size = new System.Drawing.Size(0, 31);
 			this.lblSelected.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
 			// 
 			// AMid
@@ -408,6 +408,7 @@
 			this.BtnNew.Name = "BtnNew";
 			this.BtnNew.Size = new System.Drawing.Size(23, 22);
 			this.BtnNew.ToolTipText = "New Pose";
+			this.BtnNew.Click += new System.EventHandler(this.BtnNew_Click);
 			// 
 			// BtnSave
 			// 

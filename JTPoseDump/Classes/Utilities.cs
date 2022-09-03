@@ -27,18 +27,45 @@ namespace JTPoseDump
 
 		public static void CreateFolders()
 		{
-			Config.ImagePath     = Path.Combine(Application.StartupPath, "PoseImages");
-			Config.DataPath      = Path.Combine(Application.StartupPath, "PoseData");
+			Config.GamePath      = (string)Properties.Settings.Default["GamePath"];
+			Config.ImagePath     = Path.Combine(Application.LocalUserAppDataPath, "PoseImages");
+			Config.DataPath      = Path.Combine(Application.LocalUserAppDataPath, "PoseData");
 			Config.ResourcesPath = Path.Combine(Application.StartupPath, "Resources");
-			Config.PoseImagePath = "C:\\pp\\Contraptions\\poserDump";
-			Config.PoseDataPath  = "C:\\pp\\poses";
-			Config.PoseImageFile = "C:\\pp\\Contraptions\\poserDump\\poserDump.png";
-			Config.PoseDataFile  = "C:\\pp\\poses\\poseFile.json";
 
-			if (!Directory.Exists(Config.ImagePath)) Directory.CreateDirectory(Config.ImagePath);
-			if (!Directory.Exists(Config.DataPath)) Directory.CreateDirectory(Config.DataPath);
-			if (!Directory.Exists(Config.PoseImagePath)) Directory.CreateDirectory(Config.PoseImagePath);
-			if (!Directory.Exists(Config.PoseDataPath)) Directory.CreateDirectory(Config.PoseDataPath);
+
+			if (Config.GamePath     != "" && Directory.Exists(Config.GamePath)) { 
+				Config.PoseImagePath = Path.Combine(Config.GamePath, "Contraptions", "poserDump");
+				Config.PoseImagePath = Path.Combine(Config.GamePath, "poses");
+				Config.PoseDataPath  = Path.Combine(Config.GamePath, "poses");
+				Config.ModPath       = Path.Combine(Config.GamePath, "mods", "JTPoserMod");
+				Config.PoseImageFile = Path.Combine(Config.GamePath, "Contraptions", "poserDump", "poserDump.png");
+				Config.PoseDataFile  = Path.Combine(Config.PoseDataPath, "poseFile.json");
+
+				if (!Directory.Exists(Config.ImagePath)) Directory.CreateDirectory(Config.ImagePath);
+				if (!Directory.Exists(Config.DataPath)) Directory.CreateDirectory(Config.DataPath);
+				if (!Directory.Exists(Config.PoseImagePath)) Directory.CreateDirectory(Config.PoseImagePath);
+				if (!Directory.Exists(Config.PoseDataPath)) Directory.CreateDirectory(Config.PoseDataPath);
+				if (!Directory.Exists(Config.ModPath)) Directory.CreateDirectory(Config.ModPath);
+
+				
+			}
+
+			
+		}
+
+		public static void CopyFilesRecursively(string sourcePath, string targetPath)
+		{
+			//Now Create all of the directories
+			foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+			{
+				Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+			}
+
+			//Copy all the files & Replaces any files with the same name
+			foreach (string newPath in Directory.GetFiles(sourcePath, "*.*",SearchOption.AllDirectories))
+			{
+				File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+			}
 		}
 
 		public static void ShowSettings()

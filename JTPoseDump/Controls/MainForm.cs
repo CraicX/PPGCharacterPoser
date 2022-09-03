@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace JTPoseDump
 {
@@ -142,6 +143,14 @@ namespace JTPoseDump
 			Utilities.ShowSettings();
 		}
 
-		
-	}
+        private void BtnNew_Click( object sender, EventArgs e )
+        {
+			string ImageFile = Path.Combine(Config.ImagePath, "currentpose.png");
+			string DataFile  = Path.Combine(Config.DataPath, "current.json");
+			if (File.Exists(ImageFile)) File.Delete(DataFile);
+			if (File.Exists(DataFile))  File.Delete(ImageFile);
+
+			EditPose.ResetPoseData();
+        }
+    }
 }

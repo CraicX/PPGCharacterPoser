@@ -4,6 +4,7 @@ namespace JTPoseDump
 {
 	public static class Config
 	{
+		public static string GamePath      = "";
 		public static string ImagePath     = "";
 		public static string PoseDataPath  = "";
 		public static string PoseDataFile  = "";
@@ -11,6 +12,7 @@ namespace JTPoseDump
 		public static string PoseImageFile = "";
 		public static string DataPath      = "";
 		public static string ResourcesPath = "";
+		public static string ModPath       = "";
 
 		public static string LastImageTime = "";
 		public static string LastDataTime  = "";
@@ -85,6 +87,7 @@ namespace JTPoseDump
 		public string JsonDump;
 		public string ImagePath;
 		public string DataPath;
+		
 	}
 
 	public enum PoseImageView

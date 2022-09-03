@@ -100,6 +100,7 @@ namespace JTPoseDump
 			Label.BackColor = Color.PeachPuff;
 			Label.ForeColor = Color.Black;
 			PicBox.Image    = ImageZoomIn;
+			if (Control.MouseButtons == MouseButtons.Left && !_selected) Selected = true;
 
 		}
 
