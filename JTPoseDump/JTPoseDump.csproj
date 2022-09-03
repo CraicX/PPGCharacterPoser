@@ -66,38 +66,46 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrowsePose.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="EditPose.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Classes\BrowsePose.cs" />
+    <Compile Include="Classes\Config.cs" />
+    <Compile Include="Classes\EditPose.cs" />
+    <Compile Include="Controls\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Controls\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pose.cs" />
-    <Compile Include="PoseControl.cs">
+    <Compile Include="Classes\Pose.cs" />
+    <Compile Include="Controls\PoseControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PoseControl.Designer.cs">
+    <Compile Include="Controls\PoseControl.Designer.cs">
       <DependentUpon>PoseControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Classes\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <Compile Include="Controls\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Utilities.cs" />
+    <EmbeddedResource Include="Controls\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PoseControl.resx">
+    <EmbeddedResource Include="Controls\PoseControl.resx">
       <DependentUpon>PoseControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -110,6 +118,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Controls\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -242,6 +253,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ppgposer.ico" />
+    <None Include="Resources\Icons\Settings.png" />
     <Content Include="Resources\missingpose.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
