@@ -154,8 +154,8 @@ namespace JTPoseCore
 			// 
 			// AARight
 			// 
-			this.AARight.Controls.Add(this.LblPoseCount);
 			this.AARight.Controls.Add(this.FlowPoseSet);
+			this.AARight.Controls.Add(this.LblPoseCount);
 			this.AARight.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.AARight.Location = new System.Drawing.Point(610, 33);
 			this.AARight.Margin = new System.Windows.Forms.Padding(0);
@@ -287,10 +287,10 @@ namespace JTPoseCore
 			this.FlowPoseSet.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.FlowPoseSet.BackColor = System.Drawing.Color.DarkGray;
 			this.FlowPoseSet.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.FlowPoseSet.Location = new System.Drawing.Point(0, 0);
+			this.FlowPoseSet.Location = new System.Drawing.Point(0, 33);
 			this.FlowPoseSet.Margin = new System.Windows.Forms.Padding(0);
 			this.FlowPoseSet.Name = "FlowPoseSet";
-			this.FlowPoseSet.Size = new System.Drawing.Size(535, 569);
+			this.FlowPoseSet.Size = new System.Drawing.Size(535, 536);
 			this.FlowPoseSet.TabIndex = 0;
 			// 
 			// toolStrip2
